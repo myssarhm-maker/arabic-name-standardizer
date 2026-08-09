@@ -30,6 +30,9 @@ def load_names():
         if " " in arabic:
             rules[arabic.replace(" ", "")] = canonical
 
+        # Canonical English spelling → itself
+        rules[canonical.lower()] = canonical
+
         # English variants → canonical English
         for variant in variants:
             rules[variant.lower()] = canonical
