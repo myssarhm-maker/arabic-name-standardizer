@@ -48,3 +48,17 @@ def test_standardize_compound_name():
     assert response.status_code == 200
     assert response.json()["standardized"] == "Muhammad Ali"
     assert response.json()["matched"] is True
+
+def test_unknown_name():
+    response = client.post(
+        "/standardize",
+        json={"name": "Xyzabc"},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "input": "Xyzabc",
+        "standardized": "Xyzabc",
+        "unknown": ["Xyzabc"],
+        "matched": False,
+    }
