@@ -4,38 +4,45 @@ from .rules import CANONICAL_NAMES
 
 
 class NameStandardizer:
-    """Convert Arabic personal names to approved canonical English spellings."""
+    """Standardize Arabic names and English spelling variants."""
 
     def __init__(self, rules=None):
         self.rules = rules or CANONICAL_NAMES
 
     @staticmethod
-    def normalize_arabic(text: str) -> str:
-        """Normalize spaces and remove Arabic diacritics."""
+    def normalize_text(text: str) -> str:
+        """Normalize spaces and Arabic diacritics."""
         text = text.strip()
         text = re.sub(r"\s+", " ", text)
 
-        # Remove Arabic diacritics (Tashkeel).
+        # Remove Arabic diacritics.
         text = re.sub(r"[\u064B-\u065F\u0670]", "", text)
 
         return text
 
     def standardize_token(self, token: str) -> str | None:
-        """Return the canonical English spelling for one Arabic token."""
-        token = self.normalize_arabic(token)
-        return self.rules.get(token)
+        """Return the canonical English spelling for one token."""
+
+        token = self.normalize_text(token)
+
+        # Arabic is kept as-is.
+        # English is normalized to lowercase for lookup.
+        lookup = token if any("\u0600" <= char <= "\u06FF" for char in token) else token.lower()
+
+        return self.rules.get(lookup)
 
     def standardize(self, name: str) -> dict:
         """
-        Standardize an Arabic name.
+        Standardize an Arabic or English name.
 
         Returns:
             input: Original input.
             standardized: Canonical English result.
-            unknown: Arabic tokens not found in the dictionary.
-            matched: True when every token was recognized.
+            unknown: Unrecognized tokens.
+            matched: True if all tokens were recognized.
         """
-        normalized = self.normalize_arabic(name)
+
+        normalized = self.normalize_text(name)
 
         if not normalized:
             return {
@@ -45,9 +52,8 @@ class NameStandardizer:
                 "matched": False,
             }
 
-        # First check the complete name.
-        # This is important for compound names.
-        exact = self.rules.get(normalized)
+        # Check complete name first.
+        exact = self.standardize_token(normalized)
 
         if exact:
             return {
@@ -57,15 +63,13 @@ class NameStandardizer:
                 "matched": True,
             }
 
-        # If the complete name was not found,
-        # process each part separately.
         tokens = normalized.split(" ")
 
         output = []
         unknown = []
 
         for token in tokens:
-            english = self.rules.get(token)
+            english = self.standardize_token(token)
 
             if english:
                 output.append(english)
