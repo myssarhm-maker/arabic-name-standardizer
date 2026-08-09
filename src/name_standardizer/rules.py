@@ -1,52 +1,40 @@
-# Canonical Arabic -> English name rules.
-# This dictionary will be expanded as the institutional standard grows.
+import json
+from pathlib import Path
 
-CANONICAL_NAMES = {
-    "محمد": "Muhammad",
-    "محمود": "Mahmoud",
-    "مصطفى": "Mustafa",
-    "حسين": "Hussein",
-    "حسن": "Hassan",
-    "احمد": "Ahmad",
-    "أحمد": "Ahmad",
-    "علي": "Ali",
-    "عمر": "Omar",
-    "عثمان": "Othman",
-    "يوسف": "Yusuf",
-    "ابراهيم": "Ibrahim",
-    "إبراهيم": "Ibrahim",
-    "اسماعيل": "Ismail",
-    "إسماعيل": "Ismail",
-    "اسحاق": "Ishaq",
-    "إسحاق": "Ishaq",
 
-    "عبدالله": "Abdullah",
-    "عبد الله": "Abdullah",
+DATA_FILE = (
+    Path(__file__).resolve().parents[2]
+    / "data"
+    / "names.json"
+)
 
-    "عبدالرحمن": "Abdulrahman",
-    "عبد الرحمن": "Abdulrahman",
 
-    "عبدالرحيم": "Abdulrahim",
-    "عبد الرحيم": "Abdulrahim",
+def load_names():
+    """Load canonical Arabic names and their English variants."""
 
-    "عبدالكريم": "Abdulkarim",
-    "عبد الكريم": "Abdulkarim",
+    with DATA_FILE.open("r", encoding="utf-8") as file:
+        data = json.load(file)
 
-    "عبدالعزيز": "Abdulaziz",
-    "عبد العزيز": "Abdulaziz",
+    rules = {}
 
-    "فاطمة": "Fatimah",
-    "زهراء": "Zahra",
-    "زينب": "Zainab",
-    "مريم": "Maryam",
-    "آمنة": "Amina",
-    "امينة": "Amina",
-    "أمينة": "Amina",
-    "سارة": "Sarah",
-    "نور": "Noor",
-    "هدى": "Huda",
-    "دعاء": "Duaa",
-    "رقية": "Ruqayyah",
-    "بتول": "Batool",
-    "كوثر": "Kawthar",
-}
+    for item in data["names"]:
+        arabic = item["arabic"]
+        canonical = item["canonical"]
+        variants = item.get("variants", [])
+
+        # Arabic → canonical English
+        rules[arabic] = canonical
+
+        # Also support alternative Arabic spacing
+        # for names such as عبد الرحمن.
+        if " " in arabic:
+            rules[arabic.replace(" ", "")] = canonical
+
+        # English variants → canonical English
+        for variant in variants:
+            rules[variant.lower()] = canonical
+
+    return rules
+
+
+CANONICAL_NAMES = load_names()
