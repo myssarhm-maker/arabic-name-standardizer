@@ -1,0 +1,187 @@
+{
+  "schema_version": "0.1",
+  "status": "draft",
+  "description": "Arabic names with a proposed canonical English spelling and known Latin-script variants.",
+  "names": [
+    {
+      "arabic": "محمد",
+      "canonical": "Muhammad",
+      "variants": ["Mohammed", "Mohammad", "Mohamed", "Mohamad"]
+    },
+    {
+      "arabic": "محمود",
+      "canonical": "Mahmoud",
+      "variants": ["Mahmud", "Mahmood"]
+    },
+    {
+      "arabic": "مصطفى",
+      "canonical": "Mustafa",
+      "variants": ["Mostafa", "Mustapha"]
+    },
+    {
+      "arabic": "أحمد",
+      "canonical": "Ahmad",
+      "variants": ["Ahmed"]
+    },
+    {
+      "arabic": "علي",
+      "canonical": "Ali",
+      "variants": []
+    },
+    {
+      "arabic": "حسن",
+      "canonical": "Hassan",
+      "variants": ["Hasan"]
+    },
+    {
+      "arabic": "حسين",
+      "canonical": "Hussein",
+      "variants": ["Hussain", "Husain"]
+    },
+    {
+      "arabic": "عمر",
+      "canonical": "Omar",
+      "variants": ["Umar"]
+    },
+    {
+      "arabic": "عثمان",
+      "canonical": "Othman",
+      "variants": ["Osman", "Uthman"]
+    },
+    {
+      "arabic": "يوسف",
+      "canonical": "Yusuf",
+      "variants": ["Youssef", "Yousif", "Yousef"]
+    },
+    {
+      "arabic": "إبراهيم",
+      "canonical": "Ibrahim",
+      "variants": ["Ebrahim", "Ibraheem"]
+    },
+    {
+      "arabic": "إسماعيل",
+      "canonical": "Ismail",
+      "variants": ["Ismael", "Ismaeel"]
+    },
+    {
+      "arabic": "عبدالله",
+      "canonical": "Abdullah",
+      "variants": ["Abdallah", "Abdulla"]
+    },
+    {
+      "arabic": "عبد الرحمن",
+      "canonical": "Abdulrahman",
+      "variants": [
+        "Abdul Rahman",
+        "Abdelrahman",
+        "Abdel Rahman",
+        "Abdurrahman"
+      ]
+    },
+    {
+      "arabic": "عبد الرحيم",
+      "canonical": "Abdulrahim",
+      "variants": ["Abdul Rahim", "Abdelrahim", "Abdel Rahim"]
+    },
+    {
+      "arabic": "عبد الكريم",
+      "canonical": "Abdulkarim",
+      "variants": ["Abdul Karim", "Abdelkarim", "Abdel Karim"]
+    },
+    {
+      "arabic": "عبد العزيز",
+      "canonical": "Abdulaziz",
+      "variants": ["Abdul Aziz", "Abdelaziz", "Abdel Aziz"]
+    },
+    {
+      "arabic": "فاطمة",
+      "canonical": "Fatimah",
+      "variants": ["Fatima", "Fatemah"]
+    },
+    {
+      "arabic": "زهراء",
+      "canonical": "Zahra",
+      "variants": ["Zahraa"]
+    },
+    {
+      "arabic": "زينب",
+      "canonical": "Zainab",
+      "variants": ["Zaynab", "Zeinab", "Zenab"]
+    },
+    {
+      "arabic": "مريم",
+      "canonical": "Maryam",
+      "variants": ["Mariam", "Maryem"]
+    },
+    {
+      "arabic": "آمنة",
+      "canonical": "Amina",
+      "variants": ["Aminah", "Ameena", "Amena"]
+    },
+    {
+      "arabic": "سارة",
+      "canonical": "Sarah",
+      "variants": ["Sara"]
+    },
+    {
+      "arabic": "نور",
+      "canonical": "Noor",
+      "variants": ["Nur", "Nour"]
+    },
+    {
+      "arabic": "هدى",
+      "canonical": "Huda",
+      "variants": ["Houda"]
+    },
+    {
+      "arabic": "دعاء",
+      "canonical": "Duaa",
+      "variants": ["Doaa", "Dua"]
+    },
+    {
+      "arabic": "رقية",
+      "canonical": "Ruqayyah",
+      "variants": ["Ruqayya", "Ruqaya"]
+    },
+    {
+      "arabic": "بتول",
+      "canonical": "Batool",
+      "variants": ["Batoul", "Batul"]
+    },
+    {
+      "arabic": "مرتضى",
+      "canonical": "Murtadha",
+      "variants": ["Murtada", "Murtaza"]
+    },
+    {
+      "arabic": "حيدر",
+      "canonical": "Haider",
+      "variants": ["Haidar", "Hayder"]
+    },
+    {
+      "arabic": "كاظم",
+      "canonical": "Kadhim",
+      "variants": ["Kazim"]
+    },
+    {
+      "arabic": "مهدي",
+      "canonical": "Mahdi",
+      "variants": ["Mehdi"]
+    },
+    {
+      "arabic": "جعفر",
+      "canonical": "Jafar",
+      "variants": ["Jaafar", "Jaffer"]
+    },
+    {
+      "arabic": "كريم",
+      "canonical": "Karim",
+      "variants": ["Kareem"]
+    },
+    {
+      "arabic": "رائد",
+      "canonical": "Raed",
+      "variants": ["Raid"]
+    }
+  ]
+}
