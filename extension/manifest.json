@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Arabic Name Standardizer",
+  "version": "0.1.0",
+  "description": "Standardize Arabic names and English spelling variants.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Arabic Name Standardizer"
+  },
+  "permissions": [],
+  "icons": {}
+}
