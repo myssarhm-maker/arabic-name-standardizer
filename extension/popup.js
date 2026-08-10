@@ -5,90 +5,84 @@ const result = document.getElementById("result");
 const standardizedName = document.getElementById("standardizedName");
 const status = document.getElementById("status");
 
-
-const NAME_RULES = {
-    "mohammed": "Muhammad",
-    "mohammad": "Muhammad",
-    "mohamed": "Muhammad",
-    "mohamad": "Muhammad",
-
-    "ahmad": "Ahmad",
-    "ahmed": "Ahmad",
-
-    "hassan": "Hassan",
-    "hasan": "Hassan",
-
-    "hussein": "Hussein",
-    "hussain": "Hussein",
-    "husain": "Hussein",
-
-    "ali": "Ali",
-
-    "mustafa": "Mustafa",
-    "mostafa": "Mustafa",
-
-    "yusuf": "Yusuf",
-    "yousef": "Yusuf",
-    "youssef": "Yusuf"
-};
+const API_URL = "http://127.0.0.1:8000/standardize";
 
 
-function standardizeName(name) {
+async function standardizeName(name) {
 
-    const normalized = name.trim().replace(/\s+/g, " ");
+    const response = await fetch(API_URL, {
+        method: "POST",
 
-    if (!normalized) {
-        return {
-            standardized: "",
-            unknown: [],
-            matched: false
-        };
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            name: name
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error(
+            `API request failed: ${response.status}`
+        );
     }
 
-    const tokens = normalized.split(" ");
-
-    const output = [];
-    const unknown = [];
-
-    for (const token of tokens) {
-
-        const key = token.toLowerCase();
-
-        if (NAME_RULES[key]) {
-            output.push(NAME_RULES[key]);
-        } else {
-            output.push(token);
-            unknown.push(token);
-        }
-    }
-
-    return {
-        standardized: output.join(" "),
-        unknown: unknown,
-        matched: unknown.length === 0
-    };
+    return await response.json();
 }
 
 
-function runStandardization() {
+async function runStandardization() {
 
-    const input = nameInput.value;
+    const input = nameInput.value.trim();
 
-    const response = standardizeName(input);
-
-    standardizedName.textContent = response.standardized;
-
-    if (response.matched) {
-
-        status.textContent = "✓ Name standardized";
-
-    } else {
-
-        status.textContent =
-            "Unknown: " + response.unknown.join(", ");
+    if (!input) {
+        standardizedName.textContent = "";
+        status.textContent = "Please enter a name.";
+        result.classList.remove("hidden");
+        return;
     }
 
-    result.classList.remove("hidden");
+    standardizeButton.disabled = true;
+    standardizeButton.textContent = "Standardizing...";
+
+    try {
+
+        const response = await standardizeName(input);
+
+        standardizedName.textContent =
+            response.standardized;
+
+        if (response.matched) {
+
+            status.textContent =
+                "✓ Name standardized";
+
+        } else {
+
+            status.textContent =
+                "Unknown: " +
+                response.unknown.join(", ");
+        }
+
+        result.classList.remove("hidden");
+
+    } catch (error) {
+
+        console.error(error);
+
+        standardizedName.textContent = "";
+
+        status.textContent =
+            "Unable to connect to the API.";
+
+        result.classList.remove("hidden");
+
+    } finally {
+
+        standardizeButton.disabled = false;
+        standardizeButton.textContent = "Standardize";
+    }
 }
 
 
