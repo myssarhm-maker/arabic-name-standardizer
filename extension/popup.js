@@ -1,104 +1,208 @@
-const nameInput = document.getElementById("nameInput");
-const standardizeButton = document.getElementById("standardizeButton");
+document.addEventListener("DOMContentLoaded", () => {
+    const nameInput = document.getElementById("nameInput");
+    const standardizeButton =
+        document.getElementById("standardizeButton");
 
-const result = document.getElementById("result");
-const standardizedName = document.getElementById("standardizedName");
-const status = document.getElementById("status");
+    const clearButton =
+        document.getElementById("clearButton");
 
-const API_URL = "http://127.0.0.1:8000/standardize";
+    const resultCard =
+        document.getElementById("resultCard");
 
+    const resultName =
+        document.getElementById("resultName");
 
-async function standardizeName(name) {
+    const copyButton =
+        document.getElementById("copyButton");
 
-    const response = await fetch(API_URL, {
-        method: "POST",
+    const replaceButton =
+        document.getElementById("replaceButton");
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+    let lastResult = "";
 
-        body: JSON.stringify({
-            name: name
-        })
-    });
+    function showResult(name) {
+        lastResult = name;
+        resultName.textContent = name;
+        resultCard.classList.remove("hidden");
+    }
 
-    if (!response.ok) {
-        throw new Error(
-            `API request failed: ${response.status}`
+    function hideResult() {
+        resultCard.classList.add("hidden");
+        lastResult = "";
+    }
+
+    function setLoading(loading) {
+        standardizeButton.disabled = loading;
+
+        const text =
+            standardizeButton.querySelector("span");
+
+        if (text) {
+            text.textContent = loading
+                ? "جاري التوحيد..."
+                : "توحيد الاسم";
+        }
+    }
+
+    function standardizeName() {
+        const name = nameInput.value.trim();
+
+        if (!name) {
+            nameInput.focus();
+            return;
+        }
+
+        setLoading(true);
+
+        chrome.runtime.sendMessage(
+            {
+                type: "STANDARDIZE_NAME",
+                name: name
+            },
+            (response) => {
+                setLoading(false);
+
+                if (chrome.runtime.lastError) {
+                    console.error(
+                        chrome.runtime.lastError.message
+                    );
+
+                    showResult(
+                        "تعذر الاتصال بالخادم"
+                    );
+
+                    return;
+                }
+
+                if (!response || !response.success) {
+                    console.error(
+                        response?.error
+                    );
+
+                    showResult(
+                        "تعذر الاتصال بالخادم"
+                    );
+
+                    return;
+                }
+
+                const data = response.data;
+
+                if (data && data.standardized) {
+                    showResult(data.standardized);
+                } else {
+                    showResult(name);
+                }
+            }
         );
     }
 
-    return await response.json();
-}
+    standardizeButton.addEventListener(
+        "click",
+        standardizeName
+    );
 
-
-async function runStandardization() {
-
-    const input = nameInput.value.trim();
-
-    if (!input) {
-        standardizedName.textContent = "";
-        status.textContent = "Please enter a name.";
-        result.classList.remove("hidden");
-        return;
-    }
-
-    standardizeButton.disabled = true;
-    standardizeButton.textContent = "Standardizing...";
-
-    try {
-
-        const response = await standardizeName(input);
-
-        standardizedName.textContent =
-            response.standardized;
-
-        if (response.matched) {
-
-            status.textContent =
-                "✓ Name standardized";
-
-        } else {
-
-            status.textContent =
-                "Unknown: " +
-                response.unknown.join(", ");
+    nameInput.addEventListener(
+        "keydown",
+        (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                standardizeName();
+            }
         }
+    );
 
-        result.classList.remove("hidden");
-
-    } catch (error) {
-
-        console.error(error);
-
-        standardizedName.textContent = "";
-
-        status.textContent =
-            "Unable to connect to the API.";
-
-        result.classList.remove("hidden");
-
-    } finally {
-
-        standardizeButton.disabled = false;
-        standardizeButton.textContent = "Standardize";
-    }
-}
-
-
-standardizeButton.addEventListener(
-    "click",
-    runStandardization
-);
-
-
-nameInput.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (event.key === "Enter") {
-            runStandardization();
+    nameInput.addEventListener(
+        "input",
+        () => {
+            if (!nameInput.value.trim()) {
+                hideResult();
+            }
         }
+    );
 
-    }
-);
+    clearButton.addEventListener(
+        "click",
+        () => {
+            nameInput.value = "";
+            hideResult();
+            nameInput.focus();
+        }
+    );
+
+    copyButton.addEventListener(
+        "click",
+        async () => {
+            if (!lastResult) {
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(
+                    lastResult
+                );
+
+                const text =
+                    copyButton.querySelector("span");
+
+                if (text) {
+                    const original =
+                        text.textContent;
+
+                    text.textContent = "تم النسخ ✓";
+
+                    setTimeout(() => {
+                        text.textContent = original;
+                    }, 1400);
+                }
+
+            } catch (error) {
+                console.error(
+                    "Copy failed:",
+                    error
+                );
+            }
+        }
+    );
+
+    /*
+     * Replace button
+     * سيتم ربطه مع content.js في الخطوة التالية.
+     */
+    replaceButton.addEventListener(
+        "click",
+        async () => {
+            if (!lastResult) {
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(
+                    lastResult
+                );
+
+                const text =
+                    replaceButton.querySelector("span");
+
+                if (text) {
+                    const original =
+                        text.textContent;
+
+                    text.textContent = "تم النسخ ✓";
+
+                    setTimeout(() => {
+                        text.textContent = original;
+                    }, 1400);
+                }
+
+            } catch (error) {
+                console.error(
+                    "Replace failed:",
+                    error
+                );
+            }
+        }
+    );
+
+    hideResult();
+});
