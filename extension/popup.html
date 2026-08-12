@@ -1,43 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arabic Name Standardizer</title>
     <link rel="stylesheet" href="popup.css">
 </head>
+
 <body>
-    <div class="container">
-        <h1>Arabic Name Standardizer</h1>
 
-        <p class="subtitle">
-            Standardize Arabic and English name spellings
-        </p>
+    <div class="app">
 
-        <label for="nameInput">Enter name</label>
+        <header class="header">
+            <div class="brand">
+                <div class="brand-icon">A</div>
 
-        <input
-            id="nameInput"
-            type="text"
-            placeholder="e.g. Mohammed Ali"
-            autocomplete="off"
-        >
-
-        <button id="standardizeButton">
-            Standardize
-        </button>
-
-        <div id="result" class="result hidden">
-            <div class="result-label">
-                Standardized name
+                <div class="brand-text">
+                    <h1>Arabic Name</h1>
+                    <span>Standardizer</span>
+                </div>
             </div>
 
-            <div id="standardizedName" class="standardized-name"></div>
+            <button
+                id="settingsButton"
+                class="icon-button"
+                type="button"
+                aria-label="Settings"
+                title="Settings"
+            >
+                ⚙
+            </button>
+        </header>
 
-            <div id="status" class="status"></div>
-        </div>
+        <main class="main">
+
+            <section class="input-section">
+
+                <div class="section-header">
+                    <label for="nameInput">الاسم العربي</label>
+
+                    <button
+                        id="clearButton"
+                        class="clear-button"
+                        type="button"
+                    >
+                        مسح
+                    </button>
+                </div>
+
+                <div class="input-wrapper">
+                    <textarea
+                        id="nameInput"
+                        rows="2"
+                        placeholder="اكتب الاسم باللغة العربية..."
+                        autocomplete="off"
+                        spellcheck="false"
+                    ></textarea>
+                </div>
+
+                <button
+                    id="standardizeButton"
+                    class="standardize-button"
+                    type="button"
+                >
+                    <span>توحيد الاسم</span>
+                </button>
+
+            </section>
+
+            <section
+                id="resultCard"
+                class="result-card hidden"
+            >
+
+                <div class="result-header">
+                    <span>الاسم الموحد</span>
+                </div>
+
+                <div class="result-content">
+
+                    <div
+                        id="resultName"
+                        class="result-name"
+                        dir="ltr"
+                    ></div>
+
+                    <div class="result-actions">
+
+                        <button
+                            id="copyButton"
+                            class="secondary-button"
+                            type="button"
+                        >
+                            <span>نسخ</span>
+                        </button>
+
+                        <button
+                            id="replaceButton"
+                            class="primary-small-button"
+                            type="button"
+                        >
+                            <span>استبدال</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <footer class="footer">
+
+            <div class="connection">
+                <span class="connection-dot"></span>
+                <span>متصل بالخادم</span>
+            </div>
+
+            <span class="version">
+                API v1.0
+            </span>
+
+        </footer>
+
     </div>
 
     <script src="popup.js"></script>
+
 </body>
 </html>
